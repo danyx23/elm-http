@@ -2,7 +2,7 @@ module Http
     ( getString, get, post, send
     , url, uriEncode, uriDecode
     , Request
-    , Body, empty, string, multipart
+    , Body, empty, string, json, multipart
     , Data, stringData
     , Settings, defaultSettings
     , Response, Value(..)
@@ -18,7 +18,7 @@ module Http
 @docs getString, get, post, Error
 
 # Body Values
-@docs Body, empty, string, multipart, Data, stringData
+@docs Body, empty, string, json, multipart, Data, stringData
 
 # Arbitrary Requests
 @docs send, Request, Settings, defaultSettings
@@ -29,6 +29,7 @@ module Http
 
 import Dict exposing (Dict)
 import Json.Decode as Json
+import Json.Encode
 import Native.Http
 import Task exposing (Task, andThen, mapError, succeed, fail)
 import String
@@ -145,6 +146,23 @@ JSON data to a server that does not belong in the URL.
 string : String -> Body
 string =
   BodyString
+
+
+{-| Encode a value as JSON to be sent as the body of the request.
+
+    import Json.Encode as JS
+
+    jsonData =
+        JS.object
+          [ ("sortBy", JS.string "coolness")
+          , ("take", JS.int 10)
+          ]
+    body =
+        json jsonData
+-}
+json : Json.Encode.Value -> Body
+json value =
+    string (Json.Encode.encode 0 value)
 
 
 {--
