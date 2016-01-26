@@ -74,7 +74,7 @@ Elm.Native.Http.make = function(localRuntime) {
 			// ask for a specific MIME type for the response
 			if (settings.desiredResponseType.ctor === 'Just')
 			{
-				req.overrideMimeType(settings.desiredResponseType._0);
+				req.responseType = settings.desiredResponseType._0;
 			}
 
 			// actuall send the request
@@ -94,7 +94,7 @@ Elm.Native.Http.make = function(localRuntime) {
 
 	function toResponse(req)
 	{
-		var tag = req.responseType === 'blob' ? 'Blob' : 'Text'
+		var tag = req.responseType === 'blob' || req.responseType === 'arraybuffer' ? 'Blob' : 'Text'
 		var response = tag === 'Blob' ? req.response : req.responseText;
 		return {
 			_: {},
