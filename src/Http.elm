@@ -2,7 +2,7 @@ module Http
     ( getString, get, post, send
     , url, uriEncode, uriDecode
     , Request
-    , Body, empty, string, json, multipart
+    , Body, empty, string, arrayBuffer, multipart
     , Data, stringData
     , Settings, defaultSettings
     , Response, Value(..)
@@ -18,7 +18,7 @@ module Http
 @docs getString, get, post, Error
 
 # Body Values
-@docs Body, empty, string, json, multipart, Data, stringData
+@docs Body, empty, string, arrayBuffer, multipart, Data, stringData
 
 # Arbitrary Requests
 @docs send, Request, Settings, defaultSettings
@@ -36,7 +36,7 @@ import String
 import Time exposing (Time)
 
 
-type Blob = TODO_implement_blob_in_another_library
+type alias Blob = Json.Value
 type File = TODO_implement_file_in_another_library
 
 
@@ -119,7 +119,7 @@ requests this is empty, but in other cases it may be a string or blob.
 type Body
     = Empty
     | BodyString String
-    | ArrayBuffer
+    | ArrayBuffer Json.Value
     | BodyFormData
     | BodyBlob Blob
 
@@ -160,9 +160,9 @@ string =
     body =
         json jsonData
 -}
-json : Json.Encode.Value -> Body
-json value =
-    string (Json.Encode.encode 0 value)
+arrayBuffer : Json.Encode.Value -> Body
+arrayBuffer value =
+    ArrayBuffer value
 
 
 {--
